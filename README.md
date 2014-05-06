@@ -1,4 +1,15 @@
 Helical-Helix-Solar-System-in-WebGL
 ===================================
 
-Helical Helix Solar System in WebGL
+/*
+Project by:Nagendra Kamath K      4nm11cs086	
+		   Nitish Kumar Prabhu	  4nm11cs092
+		   Navneeth Prabhu		  4nm11cs089
+		   Narasimha Prabhu		  4nm11cs088
+
+Guided by: Mr. Hemanth Kumar G
+*/
+		   
+Open RunMe.html
+Click on play project button to explore helical helix solar system
+(This project is best viewed in Mozilla Firefox v28 and above)
