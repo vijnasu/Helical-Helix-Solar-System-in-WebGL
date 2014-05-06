@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Solar System</title>
+<link rel="stylesheet" type="text/css" href="../css/stylesdesc.css"
+</head>
+<body> 
+
+<header>
+
+<hgroup>
+   <h1>Helical Helix Solar System</h1>
+   <h2>Using WebGL</h2>
+</hgroup>
+
+<nav>
+   <ul>
+      <li><a href="../index.html"><img src="../images/homebutton.jpg" width="60" height="45"/></a></li>
+      <li><a href="description.html"><img src="../images/aboutbutton.jpg" width="60" height="45"/></a></li>
+       <li><a href="helppage.html"><img src="../images/helpbutton.jpg" width="60" height="45"/></a> </li>
+   </ul>
+   <br>
+   <br>
+   <br>
+   Click to Play<a href="../solarSystem/IntroVideo.html"><img src="../images/Play.png" width="60" height="45" style="left:1000px;position:absolute"/></a>
+</nav>
+
+</header>
+<div id="mid">
+<section>
+
+<artilcle>
+
+<h3>Description</h3>
+<p align = "justify">
+The Sun is moving with certain speed and the planets follow identical Helical orbits with different orbital velocities. 
+
+The solid angle at the source of light and the distances to each planet are maintained uniformly.
+
+WebGl is the tool used to implement the 3D view of new interpretation of Solar system. An abstraction of WebGL called as THREE.js has been used for implementation.
+
+The fractal geometry required to represent the planet is animated using SphereGeometry from THREE.js.
+
+Texture mapping is done on the sphere created thereby. The dimensions of the sphere will be relatively proportional to the value proposed by NASA.
+
+The texture is obtained from the NASA website <a href=" http://www.nasa.gov/multimedia/3d_resources/images.html">http://www.nasa.gov/multimedia/3d_resources/images.html</a>. Then rotation transformation about primary axes has been applied to implement the revolution of the planets.
+ 
+</p>
+<p>
+Planets rotate in Helical orbit as shown in figure:
+  <figure>
+<img src="../images/helical_orbit.png" >
+</figure>  
+         The rotation is made possible by using the equation for x ,y ,z for the sphere that is added to Object3D. 
+The equation used is <br>
+x(t)=Rcos(t)<br>
+y(t)=Rcos(t)<br>
+z(t)=t<br>
+where, R is the orbital radius.
+<br><br>
+<font color="gray"> By varying the value of parameter 't', the planetary rotation velocity is maintained.
+</font>
+</p>
+<p>
+ <figure>
+<img src="../images/helics.png" >
+</figure>  
+</p>
+</article>
+
+
+</section>
+
+</div>
+
+<footer>
+<small>Copyright © 2012-2014 Department of CSE, NMAM Institute of Technology </small>
+
+   <nav>
+   <ul>
+     <li><a href="introduction.html"><img src="../images/homebutton.jpg" width="60" height="45"/></a></li>
+      <li><a href="description.html"><img src="../images/aboutbutton.jpg" width="60" height="45"/></a></li>
+       <li><a href="helppage.html"><img src="../images/helpbutton.jpg" width="60" height="45"/></a> </li>
+   </ul>
+</nav>
+
+</footer>
+</body>
+<html>

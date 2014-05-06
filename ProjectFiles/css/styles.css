@@ -1,0 +1,124 @@
+body{
+background-image:url('../images/Carina_Dwarf_Galaxy.jpg');
+font-family:Ubuntu,Tahoma;
+}
+p{
+ margin:5px;
+
+}
+
+header{
+width:80%;
+height:130px;
+background-image:url('../images/pictures_1920x1200_2011_Space_Galaxy_027637_.jpg');
+color:white;
+margin-right:auto;
+margin-left:auto;
+padding:5px;
+overflow:hidden;
+}
+
+hgroup{
+width:70%;
+float:left;
+
+
+}
+
+hgroup h1{
+padding-top:0;
+line-height:1em;
+}
+hgroup h2{
+text-transform:uppercase;
+line-height:1em;
+font-size:1.2em;
+}
+
+nav{
+
+width:30%;
+float:right;
+
+}
+
+nav ul{
+list-style-type:none;
+
+}
+
+nav li{
+float:left;
+margin-right:5px;
+}
+
+img {
+float:right;
+margin:0px 0px 10px 10px;
+/*box-shadow: 3px 3px 5px 1px #cccccc*/
+}
+
+section{
+width:80%;
+height:500px;
+margin-right:auto;
+margin-left:auto;
+padding:10px;
+font-size:25px;
+font-family:"Comic Sans MS", cursive, sans-serif;
+font-style:"italic";
+}
+
+div{
+width:80%;
+margin-right:auto;
+margin-left:auto;
+padding:5px;
+overflow:hidden;
+}
+
+#mid{
+background-image:url('../images/galaxy-wallpapers-325.jpg');
+color:white;
+}
+
+
+by{
+width:50%;
+float:left;
+font-family:"Comic Sans MS", cursive, sans-serif;
+font-size:25px;
+}
+
+
+credits{
+width:50%;
+float:right;
+font-family:"Comic Sans MS", cursive, sans-serif;
+font-size:25px;
+}
+h1{
+margin:0;
+padding:0;
+padding-top:10px;
+font-size:2em;
+}
+h2{
+
+font-size:1.6;
+
+}
+h3{
+
+font-size:1.3;
+}
+footer{
+
+width:80%;
+height:30px;
+background-color:black;
+color:white;
+margin-right:auto;
+margin-left:auto;
+padding:10px;
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html>
+
+   <body style="background-color:#000000" >
+    <meta charset="utf-8" />
+    <title>HeadingForProjectIn3D</title>
+
+    
+   
+    <script src="js/three.min.js"></script>
+   
+  
+    <script src="js/pacifico_regular.typeface.js"></script>
+	
+  
+    <script>
+   		document.body.style.backgroundImage="url('images/milkyway.jpg')";
+		document.body.style.backgroundPosition="center";
+		
+        var scene = new THREE.Scene();
+		scene.fog = new THREE.FogExp2( 0xffffff, 0.001);
+		
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+		
+        var light = new THREE.AmbientLight(0xffffff);
+        scene.add(light);
+		
+        var renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
+		renderer.setClearColor(0x000000,0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+        var geometry = new THREE.TextGeometry("Helical Helix  ",{font:"pacifico",weight:"normal",
+            size: 80, height: 8, curveSegments: 6, bevelThickness:0.1 , bevelSize: 0.1, bevelEnabled: true, bevelSegments:3
+        });
+
+		
+        var material = new THREE.MeshBasicMaterial({ // light
+           // specular: 0x00ff00,
+            // intermediate
+            color: 0x00ff00,
+			//map:map1,
+            // dark
+           // emissive: 0x00ff00,
+            shininess: 100
+        });
+		var obj=new THREE.Object3D();
+        var text3d1 = new THREE.Mesh(geometry, material);
+        //scene.add(text3d);
+		
+        geometry.computeBoundingBox();
+        var textWidth = geometry.boundingBox.max.x - geometry.boundingBox.min.x;
+
+        text3d1.position.set(-0.5 * textWidth, 110, 0);
+		obj.add(text3d1);
+        scene.add(obj);
+		
+	
+        var geometry = new THREE.TextGeometry("    Solar System  ", {
+            font: "pacifico", weight: "normal",
+            size: 80, height: 8, curveSegments: 20, bevelThickness: 0.1, bevelSize: 0.1, bevelEnabled: true, bevelSegments: 3
+        });
+        var text3d2 = new THREE.Mesh(geometry, material);
+        geometry.computeBoundingBox();
+        var textWidth = geometry.boundingBox.max.x - geometry.boundingBox.min.x;
+
+        text3d2.position.set(-0.5 * textWidth, 0, 0);
+		obj.add(text3d2);
+        scene.add(obj);
+       // camera.position.z = 500;
+      
+	  createStars();
+	  
+		function createStars() {
+
+            var starsGeometry = new THREE.Geometry();
+            var starsMaterial = new THREE.ParticleBasicMaterial({ color: 0xbbbbbb,  size: 10 });
+            var stars; // ???????? ?????? Particle
+
+            for (var i = 0; i < 3000; i++) {
+                var vertex = new THREE.Vector3();
+                vertex.x = Math.random()*3-1 ;
+                vertex.y = Math.random()*3-1 ;
+                vertex.z = Math.random()*3-1;
+                vertex.multiplyScalar(1000);
+                starsGeometry.vertices.push(vertex);
+            }
+
+            stars = new THREE.ParticleSystem(starsGeometry, starsMaterial);
+           
+            scene.add(stars);
+
+            var starsGeometry2 = new THREE.Geometry();
+            var starsMaterial2 = new THREE.ParticleBasicMaterial({ color: 0xbbbbbb,size:10 });
+            var stars2; // ???????? ?????? Particle
+
+            for (var i = 0; i < 3000; i++) {
+                var vertex = new THREE.Vector3();
+                vertex.x = Math.random()*(3)-1;
+                vertex.y = Math.random()*3-1;
+                vertex.z = Math.random()*3-1;
+                vertex.multiplyScalar(10000);
+                starsGeometry2.vertices.push(vertex);
+            }
+
+            stars2 = new THREE.ParticleSystem(starsGeometry2, starsMaterial2);
+          
+            scene.add(stars2);
+        }
+		
+
+	  var i =1100;
+       
+        var render = function () {
+            requestAnimationFrame(render);
+		/*	document.body.style.backgroundImage="url('images/milkyway.jpg')";
+			document.body.style.backgroundPosition="center";*/
+           
+            if (i > 500) {
+                camera.position.z = i;
+                i--;
+            }
+			else
+			{
+				obj.position.z -=1;
+				camera.position.z = i;
+				i--;
+			}
+			
+			
+            
+            renderer.render(scene, camera);
+        };
+    
+        if(i>500)
+           render();
+		
+        
+        
+//}
+
+ </script>
+			
+    </body>
+	 
+</html>

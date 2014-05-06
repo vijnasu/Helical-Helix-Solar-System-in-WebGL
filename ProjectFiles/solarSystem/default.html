@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>solarSystem</title>
+    <!-- solarSystem references -->
+  
+    <script src="js/three.js"></script>
+    <script src="js/jquery-1.11.0.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <script>
+        var camera, scene, renderer, controls;
+
+        var geometry, material, mesh, ring;
+
+        var group = new Array();
+
+        for (var i = 0; i < 10; i++)
+            group[i] = new THREE.Object3D();
+
+        var starGroup = new THREE.Object3D();
+
+        var orbitVisible = new Array();
+
+        for (var i = 1; i < 11; i++)
+            orbitVisible[i] = true;
+
+        var viewSize = 900;
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000000);
+        camera.position.z = 15000;
+        camera.position.x = 13000;
+        scene.add(camera);
+
+        controls = new THREE.OrbitControls(camera);
+        controls.addEventListener('change', render);
+
+
+        var light = new THREE.AmbientLight(0xffffff);
+        light.position.set(10, 10, 10).normalize;
+        scene.add(light);
+
+        var aspectRatio = window.innerWidth / window.innerHeight;
+
+        function onload1() {
+            SolarSystem();
+            animate();
+        }
+
+        function createPlanets() {
+            //sun
+
+            makePlanet(0, 2300 + 2500, 1000, "images/sunTexture.jpg");
+            group[0].position.x = 12000;
+            group[0].position.y = 0;
+            group[9].position.x = 12000;
+            group[9].position.y = 0;
+            //mercury
+
+            makePlanet(1, 160 + 500, 6000, "images/mercury.jpg");
+            group[1].position.x = 4000;
+            createOrbits(1, 6000, 4000, -280, 0);
+            or[2].material.color.set(0xB8860B);
+            //venus
+
+            makePlanet(2, 190 + 500, -14000, "images/venusmap.jpg");
+            group[2].position.x = -2000;
+            createOrbits(2, 14000, -2000, -100, 0);
+
+            or[2].material.color.set(0xF08080);
+
+            //earth
+
+            makePlanet(3, 200 + 500, 22000, "images/earth.jpg");
+            group[3].position.x = -8000;
+            group[3].rotation.x = 45 * Math.PI / 180;
+            createOrbits(3, 22000, -8000, 125, 0);
+
+            or[4].material.color.set(0x00ff00);
+            //Mars
+
+            makePlanet(4, 180 + 500, 30000, "images/marsmap.jpg");
+            group[4].position.x = -14000;
+            group[4].rotation.x = -45 * Math.PI / 180;
+            createOrbits(4, 30000, -14000, 395, 650);
+            or[4].material.color.set(0xF4A460);
+            //Jupiter
+
+            makePlanet(5, 600 + 700, 40000, "images/jupitermap.jpg");
+            group[5].position.x = -22000;
+            group[5].rotation.x = 60 * Math.PI / 180;
+            createOrbits(5, 40000, -22000, 500, 700);
+            or[5].material.color.set(0xB8860B);
+            //Saturn
+            geometry = new THREE.SphereGeometry(330 + 500, 32, 32);
+            map1 = new THREE.ImageUtils.loadTexture("images/saturnmap.jpg");
+            material = new THREE.MeshPhongMaterial({
+                map: map1,
+                wireframe: false
+            });
+
+            var saturn = new THREE.Mesh(geometry, material);
+            saturn.position.set(0, 47000, 0);
+            saturn.rotation.x = 45 * Math.PI / 180;
+            group[6].add(saturn);
+
+            scene.add(group[6]);
+
+            var ringGeometry = new THREE.RingGeometry(380 + 500, 650 + 700, 200, 200);
+            map1 = new THREE.ImageUtils.loadTexture("images/saturn.jpg")
+            material = new THREE.MeshPhongMaterial({
+                map: map1,
+                wireframe: false
+            });
+            var saturnRing = new THREE.Mesh(ringGeometry, material);
+            saturnRing.position.set(0, 47000, 0);
+
+            //saturnRing.rotation= 90 * Math.PI / 180;
+            saturnRing.rotation.x = -45 * Math.PI / 180;
+
+            group[6].add(saturnRing);
+            group[6].position.x = -28000;
+            createOrbits(6, 47000, -28000, 1880, 2000);
+            scene.add(group[6]);
+            or[6].material.color.set(0xFFD700);
+            //Uranus
+
+            makePlanet(7, 270 + 500, 52000, "images/uranus.jpg");
+            group[7].position.x = -36000;
+            group[7].rotation.x = 85 * Math.PI / 180
+            createOrbits(7, 52000, -36000, 1965, 2000);
+            or[7].material.color.set(0x00BFFF);
+            //Neptune
+
+            makePlanet(8, 260 + 500, 60000, "images/neptune.jpg");
+            group[8].position.x = -44000;
+            group[8].rotation.x = -30 * Math.PI / 180
+            createOrbits(8, 60000, -44000, 2570, 2500);
+            or[8].material.color.set(0xBA55D3);
+
+
+        }
+        function makePlanet(planetNo, radius, Position, texture) {
+            geometry = new THREE.SphereGeometry(radius, 32, 32);
+            map1 = new THREE.ImageUtils.loadTexture(texture);
+            material = new THREE.MeshPhongMaterial({
+                map: map1,
+                wireframe: false
+            });
+
+            var planet = new THREE.Mesh(geometry, material);
+            planet.position.set(0, Position, 0);
+
+            if (planetNo === 0) {
+
+                var spriteMaterial = new THREE.SpriteMaterial(
+                            {
+                                map: new THREE.ImageUtils.loadTexture("images/glow.png"),
+                                useScreenCoordinates: false, alignment: THREE.SpriteAlignment.center,
+                                color: 0xff0000, transparent: true, blending: THREE.AdditiveBlending,
+                                useScreenCoordinates: false
+                            });
+                var sprite = new Array();
+
+                sprite[0] = new THREE.Sprite(spriteMaterial);
+                sprite[0].scale.set(15000, 15000, 15000);
+                sprite[0].position.set(0, Position, 0);
+                sprite[0].material.color.set(0xffcc99);
+                group[0].add(sprite[0]);
+
+             
+                
+
+            }
+
+            group[planetNo].add(planet);
+            scene.add(group[planetNo]);
+        }
+
+
+
+
+        var orbitGeometry = new Array();
+        var orbitMaterial = new Array();
+        var or = new Array();
+        for (var i = 0; i < 11; i++) {
+            orbitGeometry[i] = new THREE.Geometry();
+            orbitMaterial[i] = new THREE.ParticleBasicMaterial({
+                //map: new THREE.ImageUtils.loadTexture("images/particle.png"),
+                color: 0xffffff, size: 20
+                // blending: THREE.AdditiveBlending,
+                //transparent: true
+
+            });
+            or[i] = new THREE.ParticleSystem(orbitGeometry[i], orbitMaterial[i]);
+        }
+
+
+        function createOrbits(planetNo, orbitRadius, position, planetPosOrbit, start) {
+            for (var i = start; i < 1000 + planetPosOrbit; i++) {
+                var vertex = new THREE.Vector3();
+                t = Math.PI / 180;//inorder to convert degree to radian
+
+                vertex.y = ((Math.cos(t * (i))) * orbitRadius);
+                vertex.z = ((Math.sin(t * (i))) * orbitRadius);
+                vertex.x = 25.0 * i;
+                orbitGeometry[planetNo].vertices.push(vertex);
+            }
+            or[planetNo] = new THREE.ParticleSystem(orbitGeometry[planetNo], orbitMaterial[planetNo]);
+            or[planetNo].position.set(group[planetNo].position.x - (25 * (1000 + planetPosOrbit)), 0, 0);
+            scene.add(or[planetNo]);
+        }
+
+
+        function createStars() {
+
+            var starsGeometry = new THREE.Geometry();
+            var starsMaterial = new THREE.ParticleBasicMaterial({ color: 0xbbbbbb, size: 50 });
+            var stars; // ???????? ?????? Particle
+
+            for (var i = 0; i < 30000; i++) {
+                var vertex = new THREE.Vector3();
+                vertex.x = (Math.random() * 5 - 1);
+                vertex.y = (Math.random() * 5 - 1);
+                vertex.z = (Math.random() * 5 - 1);
+                vertex.multiplyScalar(1000000);
+                starsGeometry.vertices.push(vertex);
+            }
+
+            stars = new THREE.ParticleSystem(starsGeometry, starsMaterial);
+            starGroup.add(stars);
+
+            scene.add(starGroup);
+
+            var starsGeometry2 = new THREE.Geometry();
+            var starsMaterial2 = new THREE.ParticleBasicMaterial({ color: 0xbbbbbb, size: 50 });
+            var stars2; // ???????? ?????? Particle
+
+            for (var i = 0; i < 30000; i++) {
+                var vertex = new THREE.Vector3();
+                vertex.x = (Math.random() * 5 - 1);
+                vertex.y = (Math.random() * 5 - 1);
+                vertex.z = (Math.random() * 5 - 1);
+                vertex.multiplyScalar(1000000);
+                starsGeometry2.vertices.push(vertex);
+            }
+
+            stars2 = new THREE.ParticleSystem(starsGeometry2, starsMaterial2);
+            starGroup.add(stars2);
+            scene.add(starGroup);
+        }
+
+        var params;
+
+        params = {
+            speed: 0,
+            a: true,
+            b: true,
+            c: true,
+            d: true,
+            e: true,
+            f: true,
+            g: true,
+            h: true,
+
+        };
+
+        var gui;
+        function SolarSystem() {
+
+            createPlanets();
+            createStars()
+
+            gui = new dat.GUI();
+            gui.add(params, 'speed').min(0).max(100).step(10).name('SPEED');
+            gui.add(params, 'a').name("Mercury");
+            gui.add(params, 'b').name("Venus");
+            gui.add(params, 'c').name("Earth");
+            gui.add(params, 'd').name("Mars");
+            gui.add(params, 'e').name("Jupiter");
+            gui.add(params, 'f').name("Saturn");
+            gui.add(params, 'g').name("Uranus");
+            gui.add(params, 'h').name("Neptune");
+            gui.width = 500;
+            gui.open();
+
+
+            renderer = new THREE.WebGLRenderer();
+
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColorHex(0x0000000, 0.1);
+ 
+            document.body.appendChild(renderer.domElement);
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            render();
+
+        }
+
+        function checkGui() {
+
+            if (params.a == true) {
+                or[1].visible = true;
+             
+            }
+            else {
+                or[1].visible = false;
+            }
+
+            if (params.b == true)
+                or[2].visible = true;
+            else
+                or[2].visible = false;
+
+            if (params.c == true)
+                or[3].visible = true;
+            else
+                or[3].visible = false;
+
+            if (params.d == true)
+                or[4].visible = true;
+            else
+                or[4].visible = false;
+
+            if (params.e == true)
+                or[5].visible = true;
+            else
+                or[5].visible = false;
+
+            if (params.f == true)
+                or[6].visible = true;
+            else
+                or[6].visible = false;
+
+            if (params.g == true)
+                or[7].visible = true;
+            else
+                or[7].visible = false;
+
+            if (params.h == true)
+                or[8].visible = true;
+            else
+                or[8].visible = false;
+
+            if (params.i == true)
+                or[9].visible = true;
+            else
+                or[9].visible = false;
+        }
+
+        function rotatePlanets(planetNo, x) {
+
+            group[planetNo].position.x += 25.0 + params.speed;
+            group[planetNo].rotation.x += 0.0020 + (x / 70000) + (params.speed / 10000);
+            or[planetNo].position.x += 25.0 + params.speed;
+            or[planetNo].rotation.x += 0.0020 + (x / 70000) + (params.speed / 10000);
+            or[planetNo].matrixWorldNeedsUpdate = true;
+            group[planetNo].matrixWorldNeedsUpdate = true;
+            checkGui();
+        }
+
+        function moveSun(count) {
+
+            group[0].position.x += 25 + params.speed;
+            group[0].matrixWorldNeedsUpdate = true;
+            camera.position.x += 22 + params.speed;
+            group[9].position.x += 25 + params.speed;
+            // starGroup.position.x += 2;
+            scene.lookAt(group[0].position);
+        }
+        var count = 0;
+
+        function animate() {
+            // note: three.js includes requestAnimationFrame shim
+            requestAnimationFrame(animate);
+
+
+            rotatePlanets(8, 54);
+            rotatePlanets(7, 68);
+            rotatePlanets(6, 96);
+            rotatePlanets(5, 131);
+            rotatePlanets(4, 241);
+            rotatePlanets(3, 298);
+            rotatePlanets(2, 350);
+
+            rotatePlanets(1, 500);
+
+            moveSun(count);
+
+            count++;
+
+            render();
+            update();
+        }
+        function update() {
+            controls.update();
+        }
+        function render() {
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</head>
+<body style="background-color:#000000" onload="onload1() ">
+</body>
+</html>

@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Intro page</title>
+</head>
+<body style="background-color:black">
+  <a href="default.html"><img src="images/ClickToContinue.png" width="200" height="100" style="top:600px;left:100px;position:absolute"/></a>
+    <script src="js/three.js"></script>
+   <script>
+       var renderer, scene, camera,light;
+       scene = new THREE.Scene();
+	    var group = new Array();
+      
+       for (var i = 0; i < 10; i++)
+           group[i] = new THREE.Object3D();
+       var starGroup = new THREE.Object3D();
+       function createStars() {
+
+           var starsGeometry = new THREE.Geometry();
+           var starsMaterial = new THREE.ParticleBasicMaterial({ color: 0xbbbbbb, size: 50 });
+           var stars; // ???????? ?????? Particle
+
+           for (var i = 0; i < 30000; i++) {
+               var vertex = new THREE.Vector3();
+               vertex.x = (Math.random() * 5 - 1);
+               vertex.y = (Math.random() * 5 - 1);
+               vertex.z = (Math.random() * 5 - 1);
+               vertex.multiplyScalar(1000000);
+               starsGeometry.vertices.push(vertex);
+           }
+
+           stars = new THREE.ParticleSystem(starsGeometry, starsMaterial);
+           starGroup.add(stars);
+
+           scene.add(starGroup);
+
+           var starsGeometry2 = new THREE.Geometry();
+           var starsMaterial2 = new THREE.ParticleBasicMaterial({ color: 0xbbbbbb, size: 50 });
+           var stars2; // ???????? ?????? Particle
+
+           for (var i = 0; i < 30000; i++) {
+               var vertex = new THREE.Vector3();
+               vertex.x = (Math.random() * 5 - 1);
+               vertex.y = (Math.random() * 5 - 1);
+               vertex.z = (Math.random() * 5 - 1);
+               vertex.multiplyScalar(1000000);
+               starsGeometry2.vertices.push(vertex);
+           }
+
+           stars2 = new THREE.ParticleSystem(starsGeometry2, starsMaterial2);
+           starGroup.add(stars2);
+           scene.add(starGroup);
+       }
+
+	function init()
+	{
+	    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+	    renderer.setClearColor(0x000000, 0);
+       renderer.setSize(window.innerWidth, window.innerHeight);
+       document.body.appendChild(renderer.domElement);
+
+       light = new THREE.AmbientLight(0xffffff);
+       light.position.set(0, 0, 10).normalize;
+       scene.add(light);
+
+       camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000000);
+       camera.position.z = 18000;
+       camera.position.y = 1000;
+       camera.position.x = 15000;
+       createStars();
+       starGroup.position.set(15000, 0, 0);
+	    makePlanet(0, 2300 + 2500, 15000, "images/sunTexture.jpg");
+
+       makePlanet(1, 160 + 1500, -25000, "images/mercury.jpg");
+
+
+       makePlanet(2, 190 + 1500, -25000, "images/venusmap.jpg");
+
+
+       makePlanet(3, 200 + 1500, -25000, "images/earth.jpg");
+
+       makePlanet(4, 180 + 1500, -25000, "images/marsmap.jpg");
+
+
+       makePlanet(5, 600 + 2000, -25000, "images/jupitermap.jpg");
+
+       //Saturn
+			var geometry = new THREE.SphereGeometry(330 + 2000, 32, 32);
+           var  map1 = new THREE.ImageUtils.loadTexture("images/saturnmap.jpg");
+            var material = new THREE.MeshPhongMaterial({
+                map: map1,
+                wireframe: false
+            });
+            var saturn = new THREE.Mesh(geometry, material);
+            saturn.position.set(-25000, 1000, 0);
+            saturn.rotation.x = 45 * Math.PI / 180;
+            group[6].add(saturn);
+
+            scene.add(group[6]);
+
+            var ringGeometry = new THREE.RingGeometry(380 + 2000, 650 + 3000, 200, 200);
+            map1 = new THREE.ImageUtils.loadTexture("images/saturn.jpg")
+            material = new THREE.MeshPhongMaterial({
+                map: map1,
+                wireframe: false
+            });
+            var saturnRing = new THREE.Mesh(ringGeometry, material);
+            saturnRing.position.set(-25000,1000, 0);
+
+            //saturnRing.rotation= 90 * Math.PI / 180;
+            saturnRing.rotation.x = -45 * Math.PI / 180;
+
+            group[6].add(saturnRing);
+          
+       
+            scene.add(group[6]);
+           
+       makePlanet(7, 270 + 1500, -25000, "images/uranus.jpg");
+
+       makePlanet(8, 260 + 1500, -25000, "images/neptune.jpg");
+      
+	}
+      
+
+       function makePlanet(planetNo, radius, position, texture) {
+           var geometry = new THREE.SphereGeometry(radius, 32, 32);
+          var map1 = new THREE.ImageUtils.loadTexture(texture);
+           var material = new THREE.MeshPhongMaterial({
+               map: map1,
+               wireframe: false
+           });
+
+           var planet = new THREE.Mesh(geometry, material);
+           planet.position.set(position, 1000, 0);
+
+           if (planetNo === 0) {
+
+               var spriteMaterial = new THREE.SpriteMaterial(
+                           {
+                               map: new THREE.ImageUtils.loadTexture("images/glow.png"),
+                               useScreenCoordinates: false, alignment: THREE.SpriteAlignment.center,
+                               color: 0xff0000, transparent: true, blending: THREE.AdditiveBlending,
+                               useScreenCoordinates: false
+                           });
+               var sprite = new Array();
+
+               sprite[0] = new THREE.Sprite(spriteMaterial);
+               sprite[0].scale.set(1000, 1000, 1000);
+               sprite[0].position.set(position, 1000, 0);
+               sprite[0].material.color.set(0xffcc99);
+               group[0].add(sprite[0]);
+
+           }
+          
+           group[planetNo].add(planet);
+           scene.add(group[planetNo]);
+       }
+	  
+       //create cube
+       var geo = new THREE.CubeGeometry(15000, 20000, 1, 64, 64, 64);
+       var mat = new Array();
+
+
+       var cube = new Array();
+       var texture = new Array("images/suninfo.jpg","images/mercuryinfo.jpg","images/venusinfo.jpg",
+           "images/earthinfo.jpg","images/marsinfo.jpg","images/jupitorinfo.jpg",
+           "images/saturninfo.jpg","images/uranusinfo.jpg","images/neptuneinfo.jpg");
+       for(var i=0;i<=8;i++)
+       {
+           cube[i] = new THREE.Object3D();
+           mat[i] = new THREE.MeshFaceMaterial([
+        new THREE.MeshBasicMaterial({color:0xffffff }),
+		new THREE.MeshBasicMaterial({ color: 0xffffff }),
+		new THREE.MeshBasicMaterial({ color: 0xffffff }),
+		new THREE.MeshBasicMaterial({ color: 0xffffff }),
+		new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture(texture[i]) }),
+		new THREE.MeshBasicMaterial({color:0xffffff })
+               ]);
+          
+           cube[i] = new THREE.Mesh(geo, mat[i]);
+           cube[i].position.set(30000,30000,0);    
+           scene.add(cube[i]);
+       }
+     
+  
+       function slide(planetNo, count) {
+           var temp = 0;
+           if (planetNo > 0)
+               temp = 40;
+           if (count >= 0 && count < 100) {
+               camera.position.z -= 100+temp;
+           }
+           else if (count > 200 && count <= 300) {
+               camera.position.z += 100+temp;
+           }
+           else if (count > 300 && count <= 700) {
+              
+                   if (count > 300 && count <= 400)
+                       cube[planetNo].position.y -= 300;
+                   else if (count > 600 && count <= 700)
+                       cube[planetNo].position.y -= 300;
+               
+           }
+           if (count > 700) {
+
+               group[i].position.x += 500;
+               group[i + 1].position.x += 400;
+           } 
+          
+       }
+       function movePlanet(count) {
+
+           if (count >= 0 && count <= 100) {
+               camera.position.z += 300;
+            
+               for (var l = 0; l < 9; l++)
+                   cube[l].position.y -= 1000;
+           }
+           if (!flag[8]&&count >= 0) {
+               if (group[8].position.x === -18000)
+                   flag[8] = true;
+               group[8].position.x -= 500;
+           }
+           if (!flag[7] && count >= 200) {
+               if (group[7].position.x === -8000)
+                   flag[7] = true;
+               group[7].position.x -= 500;
+           }
+              
+           if (!flag[6] && count >= 400) {
+               if ( group[6].position.x === 2000)
+                   flag[6] = true;
+               group[6].position.x -= 500;
+           }
+           if (!flag[5] && count >= 600) {
+               if (group[5].position.x ===12000)
+                   flag[5] = true;
+               group[5].position.x -= 500;
+           }
+           if (!flag[4] && count >= 800) {
+               if (group[4].position.x === 22000)
+                   flag[4] = true;
+               group[4].position.x -= 500;
+           }
+           if (!flag[3] && count >= 1000) {
+               if (group[3].position.x === 32000)
+                   flag[3] = true;
+               group[3].position.x -= 500;
+           }
+           if (!flag[2] && count >= 1200) {
+               if (group[2].position.x === 42000)
+                   flag[2] = true;
+               group[2].position.x -= 500;
+           }
+           if (!flag[1] && count >= 1400) {
+               if (group[1].position.x === 52000)
+                   flag[1] = true;
+               group[1].position.x -= 500;
+           }
+           if (!flag[0] && count >= 1400) {
+               if (group[0].position.x ===32000)
+                   flag[0] = true;
+               group[0].position.x -= 1000;
+           }
+       }
+
+       var c = 0, i = 0;
+       var flag1 = false;
+       var flag = new Array();
+       for (var k = 0; k < 10; k++)
+           flag[k] = false;
+       function animate() {
+           requestAnimationFrame(animate);
+           renderer.render(scene, camera);
+           if(!flag1&&i<=8){
+               slide(i, c);
+               if (c === 800) {
+                   c = 0;
+                   
+                   i = i + 1;
+               }
+               if (i === 9) {
+                   for (var g = 0; g < 9; g++)
+                       group[g].position.x += 40000;
+                   flag1 = true;
+               }
+
+           }
+
+           if (flag1) {
+               movePlanet(c);
+           }
+           
+           starGroup.position.z += 10;
+           c++;
+       }
+      
+	   init();
+       animate();
+   </script>
+</body>
+</html>
